@@ -63,7 +63,7 @@
 
 
 (defn find-nv []
-  (some #(= (apply compute-value %) 19690720) possible-vals)
+  (some #(when (= (apply compute-value %) 19690720) %) possible-vals)
 
 (find-nv)
 

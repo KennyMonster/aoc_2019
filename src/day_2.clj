@@ -31,13 +31,15 @@
 
 (defn run
   "Run a program til completion"
-  [program pc]
-  (if-let [new-state (exec program pc)]
-    (recur new-state (+ pc 4))
-    program))
+  [program]
+  (loop [program program
+         pc      0]
+    (if-let [new-state (exec program pc)]
+      (recur new-state (+ pc 4))
+      program)))
 
 
-(first (run restored-state 0))
+(first (run restored-state))
 
 
 ;; part 2
@@ -57,7 +59,7 @@
 
 (defn compute-value
   [noun verb]
-  (first (run (restore-state noun verb) 0)))
+  (first (run (restore-state noun verb))))
 
 
 (defn find-nv []

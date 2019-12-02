@@ -38,3 +38,31 @@
 
 
 (first (run restored-state 0))
+
+
+;; part 2
+
+(defn restore-state
+  [noun verb]
+  (-> input-vec
+      (assoc 1 noun)
+      (assoc 2 verb)))
+
+
+(def possible-vals
+  (for [n (range 100)
+        v (range 100)]
+    [n v]))
+
+
+(defn compute-value
+  [noun verb]
+  (first (run (restore-state noun verb) 0)))
+
+
+(defn find-nv []
+  (first (filter #(= (apply compute-value %) 19690720) possible-vals)))
+
+(find-nv)
+
+(+ (* 100 76) 21)

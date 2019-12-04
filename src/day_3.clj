@@ -49,9 +49,9 @@
         [dir mag] path
         delta (inc mag)]
     (case dir
-      \U (for [y (range (inc y0) delta 1)] [x0 y])
+      \U (for [y (range (inc y0) (+ y0 delta) 1)] [x0 y])
       \D (for [y (range (dec y0) (- y0 delta) -1)] [x0 y])
-      \R (for [x (range (inc x0) delta 1)] [x y0])
+      \R (for [x (range (inc x0) (+ x0 delta) 1)] [x y0])
       \L (for [x (range (dec x0) (- x0 delta) -1)] [x y0]))))
 
 ;(get-pos-seq [0 0] [\L 3])
@@ -86,15 +86,3 @@
        (apply clojure.set/intersection)
        (apply min-key manhattan-distance)
        (manhattan-distance)))
-
-
-(def t1 ["R8,U5,L5,D3"
-         "U7,R6,D4,L4"])
-
-#_(->> t1
-       (map str->paths)
-       (map wire-positions)
-       (apply clojure.set/intersection))
-
-
-;(wire-positions (str->paths "R3,U3,L3,D3"))

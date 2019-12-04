@@ -19,3 +19,22 @@
        (map int->seq)
        (filter possible-passcode)
        (count)))
+
+
+;; Part 2
+
+
+(defn possible-passcode-2
+  [digits]
+  (let [digit-counts (frequencies digits)
+        counts       (into #{} (vals digit-counts))]
+    (and (possible-passcode digits)
+         (contains? counts 2))))
+
+
+
+(time
+  (->> (range 264360 746325)
+       (map int->seq)
+       (filter possible-passcode-2)
+       (count)))

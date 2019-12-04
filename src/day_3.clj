@@ -1,7 +1,7 @@
 (ns day_3
   (:require [clojure.string :as str]))
 
-(set! *print-length* 10)
+(set! *print-length* 30)
 
 (def input-filename "input/day_3_input")
 
@@ -12,7 +12,7 @@
         int-str        (subs ds 1)]
     [direction-char (Long. int-str)]))
 
-;(parse-direction "R233")
+;(parse-path "R233")
 
 (defn str->paths [s]
   (-> s
@@ -28,7 +28,7 @@
 
 
 (defn get-end-pos
-  "Given a starting pos, find the end pos"
+  "Given a starting pos and path, find the end pos"
   [pos path]
   (let [[x y] pos
         [dir mag] path]
@@ -61,7 +61,7 @@
   "Find all positions occupied by a wire specified by paths"
   [paths]
   (loop [paths     paths
-         positions #{}
+         positions []
          curr-pos  [0 0]]
     (if (seq paths)
       (let [path              (first paths)
@@ -83,6 +83,11 @@
 (time
   (->> input-paths
        (map wire-positions)
+       (map set)
        (apply clojure.set/intersection)
        (apply min-key manhattan-distance)
        (manhattan-distance)))
+
+
+;; Part 2
+

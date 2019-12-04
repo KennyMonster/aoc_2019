@@ -3,6 +3,8 @@
 
 (set! *print-length* 30)
 
+(defn trace [x] (do (println x) x))
+
 (def input-filename "input/day_3_input")
 
 (defn parse-path
@@ -80,14 +82,46 @@
   [[x y]]
   (+ (Math/abs x) (Math/abs y)))
 
-(time
-  (->> input-paths
+
+(defn intersections
+  "Where 2 wires intersect. Input is seq of wire paths"
+  [wire-paths]
+  (->> wire-paths
        (map wire-positions)
        (map set)
-       (apply clojure.set/intersection)
+       (apply clojure.set/intersection)))
+
+(time
+  (->> (intersections input-paths)
        (apply min-key manhattan-distance)
        (manhattan-distance)))
 
-
 ;; Part 2
 
+
+(defn steps-to-intersections
+  "Given the path positions in order of a wire
+  and a set of all intersections, return a map
+  of intersection pos -> shorted number of steps"
+  [path-positions intersections-set]
+  (loop [path-positions       path-positions
+         intersect-pos->steps {}
+         steps-walked         1] ;; [0 0] start not part of path-positions
+    (if (seq path-positions)
+      (let [curr-pos       (first path-positions)
+            rest-positions (rest path-positions)]
+        ; if an intersection point, add to map, otherwise just keep walking
+        (if (and (intersections-set curr-pos)
+                 (not (contains? intersect-pos->steps curr-pos)))
+          (recur rest-positions (assoc intersect-pos->steps curr-pos steps-walked) (inc steps-walked))
+          (recur rest-positions intersect-pos->steps (inc steps-walked))))
+
+      intersect-pos->steps)))
+
+
+(time
+  (let [intersect-positions (intersections input-paths)
+        step-maps           (map #(steps-to-intersections % intersect-positions) (map wire-positions input-paths))
+        merged-step-maps    (apply merge-with vector step-maps)
+        total-distances     (map #(apply + %) (vals merged-step-maps))]
+    (reduce min total-distances)))

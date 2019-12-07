@@ -17,4 +17,18 @@
 (def test-input
   "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L")
 
+(def parent-map (parse-input (slurp input-filename)))
 
+(defn path-to-root [parent-map id]
+  (loop [id    id
+         path  []]
+    (let [parent (get parent-map id)]
+      (if (nil? parent)
+        path
+        (recur parent (conj path parent))))))
+
+;(path-to-root parent-map "CO")
+
+(->> (keys parent-map)
+     (map #(count (path-to-root parent-map %)))
+     (reduce +))

@@ -36,6 +36,9 @@
 
 ;; part 2
 
+(def test-input-2
+  "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L\nK)YOU\nI)SAN")
+
 
 (defn add-edge-to-adjacency-list
   "Given a map and tuple of nodes, updates AJ"
@@ -92,9 +95,11 @@
 
         dist))))
 
-;(dijkstra (build-adjacency-list test-input) "K")
+(dijkstra (build-adjacency-list test-input-2) "YOU")
 
 (time
   ((dijkstra (build-adjacency-list (slurp input-filename)) "YOU") "SAN"))
 
 ; 438 is too high?
+
+; it's just 436 because YOU and SAN are pretend nodes, so subtract them out
